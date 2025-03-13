@@ -63,21 +63,29 @@ lwwdg_add(lwwdg_wdg_t* wdg, uint32_t timeout) {
     uint8_t ret = 1;
     LWWDG_CRITICAL_SECTION_DEFINE;
 
-    wdg->timeout = timeout;
-    wdg->last_reload_time = LWWDG_GET_TIME();
-    LWWDG_CRITICAL_SECTION_LOCK();
-    /* Check if already on a list -> we don't want that */
-    for (lwwdg_wdg_t* w_dg = wdgs; w_dg != NULL; w_dg = w_dg->next) {
-        if (w_dg == wdg) {
-            ret = 0;
-        }
+    if (timeout == 0) {
+        ret = 0;
     }
+
     if (ret) {
-        /* Add to beginning of a list */
-        wdg->next = wdgs;
-        wdgs = wdg;
+        uint32_t time_now = LWWDG_GET_TIME();
+        LWWDG_CRITICAL_SECTION_LOCK();
+        /* Check if already on a list -> we don't want that */
+        for (lwwdg_wdg_t* w_dg = wdgs; w_dg != NULL; w_dg = w_dg->next) {
+            if (w_dg == wdg) {
+                ret = 0;
+            }
+        }
+        if (ret) {
+            wdg->timeout = timeout;
+            wdg->last_reload_time = time_now;
+
+            /* Add to beginning of a list */
+            wdg->next = wdgs;
+            wdgs = wdg;
+        }
+        LWWDG_CRITICAL_SECTION_UNLOCK();
     }
-    LWWDG_CRITICAL_SECTION_UNLOCK();
     return ret;
 }
 
@@ -143,8 +151,9 @@ lwwdg_remove(lwwdg_wdg_t* wdg) {
     }
 
     /* ind should not be NULL if entry exists on linked list */
-    if (ind != NULL) {
-        *ind = wdg->next; /* Remove entry from the list */
+    if (*ind == wdg) {
+        *ind = (*ind)->next; /* Remove entry from the list */
+        ret = 1;
     }
     LWWDG_CRITICAL_SECTION_UNLOCK();
 

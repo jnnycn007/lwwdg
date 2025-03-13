@@ -3,9 +3,13 @@
 #include "lwwdg/lwwdg.h"
 
 extern void example_win32(void);
+extern int test_run(void);
 
 int
 main(void) {
+    return test_run();
+#if 0
     example_win32();
     return 0;
+#endif
 }
