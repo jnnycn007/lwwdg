@@ -7,9 +7,10 @@ extern int test_run(void);
 
 int
 main(void) {
+#if WORKFLOW_TEST
     return test_run();
-#if 0
+#else /* WORKFLOW_TEST */
     example_win32();
     return 0;
-#endif
+#endif /* WORKFLOW_TEST */
 }

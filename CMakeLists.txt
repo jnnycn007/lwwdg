@@ -22,6 +22,6 @@ else()
     target_link_libraries(${PROJECT_NAME} lwwdg)
 
     # Add compile options to the library, which will propagate options to executable through public link
-    target_compile_definitions(lwwdg PUBLIC WIN32 _DEBUG CONSOLE LWWDG_DEV)
+    target_compile_definitions(lwwdg PUBLIC WIN32 _DEBUG CONSOLE LWWDG_DEV "WORKFLOW_TEST=${WORKFLOW_TEST}")
     target_compile_options(lwwdg PUBLIC -Wall -Wextra -Wpedantic)
 endif()

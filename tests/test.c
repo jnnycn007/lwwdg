@@ -15,6 +15,8 @@ test_run(void) {
     uint8_t ret = 0;
     static lwwdg_wdg_t wdg1, wdg2, wdg3;
 
+    printf("Test started\r\n");
+
     ret = lwwdg_init();
     TEST_RUN(ret > 0);
 
