@@ -20,16 +20,16 @@ jobs:
         run: |
           choco install mingw --version=12.2.0 -y
           echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $GITHUB_PATH
+          gcc --version
 
-      - name: Verify GCC Installation
-        run: gcc --version
-
-      - name: CMake configure
-        run: cmake --preset workflow-run-test
-
-      - name: Run CMake
-        run: cmake --build --preset workflow-run-test
+      - name: Build
+        run: |
+          mkdir __build__
+          cd __build__
+          cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=gcc -S.. -G Ninja
+          cmake --build .
 
       - name: Run Tests
-        working-directory: build/workflow-run-test
-        run: ./LwLibPROJECT.exe
+        working-directory: __build__
+        run: |
+          ctest .
