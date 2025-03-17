@@ -27,5 +27,5 @@ else()
     target_compile_options(lwwdg PUBLIC -Wall -Wextra -Wpedantic)
 
     # Add test
-    add_test(NAME Mytest COMMAND $<TARGET_FILE:${CMAKE_PROJECT_NAME}>)
+    add_test(NAME Test COMMAND $<TARGET_FILE:${CMAKE_PROJECT_NAME}>)
 endif()
