@@ -31,6 +31,8 @@
         ]
     },
     "build": {
-        "includeDir": "lwwdg/src/include"
+        "includeDir": "lwwdg/src/include",
+        "srcDir": ".",
+        "srcFilter": "+<lwwdg>"
     }
 }
